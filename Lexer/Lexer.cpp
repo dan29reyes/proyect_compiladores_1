@@ -1,4 +1,5 @@
 #include "Lexer.hpp"
+#include "../ErrorHandler.h"
 
 enum class State
 {
@@ -11,6 +12,8 @@ enum class State
     COMMENT_Q2,
     OPERATOR_Q1,
     OPERATOR_Q2,
+    AND_Q1,
+    OR_Q1,
     LESS_Q1,
 };
 
@@ -47,6 +50,10 @@ Token Lexer::nextToken()
             // Manejo de espacios en blanco y saltos de linea
             else if (currentChar == ' ' || currentChar == '\t' || currentChar == '\n' || currentChar == '\r')
             {
+                if (currentChar == '\n')
+                {
+                    incrementLineNumber();
+                }
                 currentChar = in.get();
                 state = State::Q0;
             }
@@ -128,9 +135,21 @@ Token Lexer::nextToken()
                 currentChar = in.get();
                 state = State::OPERATOR_Q2;
             }
+            else if (currentChar == '&')
+            {
+                text += static_cast<char>(currentChar);
+                currentChar = in.get();
+                state = State::AND_Q1;
+            }
+            else if (currentChar == '|')
+            {
+                text += static_cast<char>(currentChar);
+                currentChar = in.get();
+                state = State::OR_Q1;
+            }
             else
             {
-                throw std::runtime_error("Unexpected character '" + static_cast<char>(currentChar));
+                ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
             }
             break;
         case State::NUMBER_Q1:
@@ -185,7 +204,33 @@ Token Lexer::nextToken()
             }
             else
             {
-                throw std::runtime_error("Unexpected character '" + static_cast<char>(currentChar));
+                ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
+            }
+            break;
+
+        case State::AND_Q1:
+            if (currentChar == '&')
+            {
+                text += static_cast<char>(currentChar);
+                currentChar = in.get();
+                return Token::AND_OPERATOR;
+            }
+            else
+            {
+                ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
+            }
+            break;
+
+        case State::OR_Q1:
+            if (currentChar == '|')
+            {
+                text += static_cast<char>(currentChar);
+                currentChar = in.get();
+                return Token::OR_OPERATOR;
+            }
+            else
+            {
+                ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
             }
             break;
 
@@ -220,6 +265,10 @@ Token Lexer::nextToken()
                 else if (text == "=")
                 {
                     return Token::ASSIGNMENT;
+                }
+                else
+                {
+                    ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
                 }
             }
             break;
@@ -271,7 +320,7 @@ Token Lexer::nextToken()
             }
             else
             {
-                throw std::runtime_error("Unexpected character '" + static_cast<char>(currentChar));
+                ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
             }
             break;
 

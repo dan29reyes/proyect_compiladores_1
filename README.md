@@ -18,11 +18,14 @@ Para ejecutar el proyecto, sigue estos pasos:
 
    ```bash
    #Para Macos
-   clang++ -std=c++17 -Wall -Wextra -g main.cpp Lexer/Lexer.cpp -o compiled_program
+   clang++ -std=c++17 -Wall -Wextra -g main.cpp ErrorHandler.cpp Lexer/Lexer.cpp -o my_program
+
+   #Para Windows
+   g++ Lexer/Lexer.cpp ErrorHandler.cpp main.cpp -o my_program
    ```
 
 4. Ejecuta el programa compilado:
    ```bash
-   #Para Macos
-   ./compiled_program test.txt
+   #Para Macos y Windows
+   ./my_program test.txt
    ```

@@ -1,3 +1,4 @@
 build/
-compiled_program
-compiled_program.dSYM/ 
+my_program
+my_program.dSYM/ 
+my_program.exe
