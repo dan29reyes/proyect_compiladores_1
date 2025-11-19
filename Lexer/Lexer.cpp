@@ -106,7 +106,7 @@ Token Lexer::nextToken()
                 currentChar = in.get();
                 state = State::LESS_Q1;
             }
-            else if (currentChar == '+' || currentChar == '*' || currentChar == '/' || currentChar == '%')
+            else if (currentChar == '+' || currentChar == '*' || currentChar == '%')
             {
                 char op = static_cast<char>(currentChar);
                 text += op;
@@ -117,8 +117,6 @@ Token Lexer::nextToken()
                     return Token::ADD_OPERATOR;
                 case '*':
                     return Token::MUL_OPERATOR;
-                case '/':
-                    return Token::DIV_OPERATOR;
                 case '%':
                     return Token::MOD_OPERATOR;
                 }
@@ -314,13 +312,12 @@ Token Lexer::nextToken()
         case State::COMMENT_Q1:
             if (currentChar == '/')
             {
-                text += static_cast<char>(currentChar);
                 currentChar = in.get();
                 state = State::COMMENT_Q2;
             }
             else
             {
-                ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
+                return Token::DIV_OPERATOR;
             }
             break;
 
