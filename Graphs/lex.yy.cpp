@@ -73,7 +73,7 @@ class Lexer : public reflex::AbstractLexer<reflex::Matcher> {
 
 int Lexer::lex(void)
 {
-  static const char *REGEX_INITIAL = "(?m)([0-9]+)|([A-Za-z]+)|([\\x09\\x20])";
+  static const char *REGEX_INITIAL = "(?m)(-?[0-9]+)|([A-Z_a-z]+)|([\\x09\\x0a\\x0d\\x20]*)|([/])|([\\x2b])|([\\x2a])|([\\x2d])|([/][/][\\x2e]*)|([;])|([,])|([\\x28])|([\\x29])|([\\x7b])|([\\x7d])";
   static const reflex::Pattern PATTERN_INITIAL(REGEX_INITIAL);
   if (!has_matcher())
   {
@@ -86,7 +86,7 @@ int Lexer::lex(void)
           case 0:
             if (matcher().at_end())
             {
-#line 5 "Lexer2.l"
+#line 16 "Lexer2.l"
 { return Token::END_OF_FILE }
             }
             else
@@ -94,17 +94,61 @@ int Lexer::lex(void)
               out().put(matcher().input());
             }
             break;
-          case 1: // rule Lexer2.l:2: [0-9]+ :
+          case 1: // rule Lexer2.l:2: -?[0-9]+ :
 #line 2 "Lexer2.l"
 { return Token::NUMBER }
             break;
-          case 2: // rule Lexer2.l:3: [a-zA-Z]+ :
+          case 2: // rule Lexer2.l:3: [a-zA-Z_]+ :
 #line 3 "Lexer2.l"
 { return Token::IDENTIFIER }
             break;
-          case 3: // rule Lexer2.l:4: [ \t] :
+          case 3: // rule Lexer2.l:4: [ \t\r\n]* :
 #line 4 "Lexer2.l"
 { /* IGNORAR */ }
+            break;
+          case 4: // rule Lexer2.l:5: [/] :
+#line 5 "Lexer2.l"
+{ return Token::DIV_OPERATOR }
+            break;
+          case 5: // rule Lexer2.l:6: [+] :
+#line 6 "Lexer2.l"
+{ return Token::ADD_OPERATOR }
+            break;
+          case 6: // rule Lexer2.l:7: [*] :
+#line 7 "Lexer2.l"
+{ return Token::MULT_OPERATOR }
+            break;
+          case 7: // rule Lexer2.l:8: [-] :
+#line 8 "Lexer2.l"
+{ return Token::SUB_OPERATOR }
+            break;
+          case 8: // rule Lexer2.l:9: [/][/][.]* :
+#line 9 "Lexer2.l"
+{ /* IGNORAR */ }
+            break;
+          case 9: // rule Lexer2.l:10: [;] :
+#line 10 "Lexer2.l"
+{ return Token::SEMICOLON }
+            break;
+          case 10: // rule Lexer2.l:11: [,] :
+#line 11 "Lexer2.l"
+{ return Token::COMMA }
+            break;
+          case 11: // rule Lexer2.l:12: [(] :
+#line 12 "Lexer2.l"
+{ return Token::LEFT_PAREN }
+            break;
+          case 12: // rule Lexer2.l:13: [)] :
+#line 13 "Lexer2.l"
+{ return Token::RIGHT_PAREN }
+            break;
+          case 13: // rule Lexer2.l:14: [{] :
+#line 14 "Lexer2.l"
+{ return Token::LEFT_BRACE }
+            break;
+          case 14: // rule Lexer2.l:15: [}] :
+#line 15 "Lexer2.l"
+{ return Token::RIGHT_BRACE }
             break;
         }
   }
