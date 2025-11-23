@@ -180,12 +180,45 @@ void Parser::Term()
 
 void Parser::Factor()
 {
+    Unary();
+    while (currToken == Token::MUL_OPERATOR || currToken == Token::DIV_OPERATOR || currToken == Token::MOD_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        Unary();
+    }
 }
 
 void Parser::Unary()
 {
+    if (currToken == Token::NOT_OPERATOR || currToken == Token::SUB_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        Unary();
+    }
+    else
+    {
+        Primary();
+    }
 }
 
 void Parser::Primary()
 {
+    if (currToken == Token::NUMBER || currToken == Token::IDENTIFIER)
+    {
+        currToken = lexer.nextToken();
+    }
+    else if (currToken == Token::LEFT_PAREN)
+    {
+        currToken = lexer.nextToken();
+        Expression();
+        if (currToken != Token::RIGHT_PAREN)
+        {
+            ErrorHandler::throwUnexpectedTokenError(")", Lexer::tokenToString(currToken));
+        }
+        currToken = lexer.nextToken();
+    }
+    else
+    {
+        ErrorHandler::throwUnexpectedTokenError("a primary expression", Lexer::tokenToString(currToken));
+    }
 }
