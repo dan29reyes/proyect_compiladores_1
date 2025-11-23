@@ -6,6 +6,7 @@ class ErrorHandler
 {
 public:
     static void throwInvalidCharacterError(char invalidChar, int lineNumber);
+    static void throwUnexpectedTokenError(const std::string &expected, const std::string &found);
 };
 
 #endif

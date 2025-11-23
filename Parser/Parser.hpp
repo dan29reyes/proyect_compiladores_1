@@ -9,10 +9,11 @@ public:
         currToken = lexer.nextToken();
         while (currToken != Token::END_OF_FILE)
         {
+            Statement();
             currToken = lexer.nextToken();
         }
     }
-    ~Parser();
+    ~Parser() {}
 
 private:
     Lexer lexer;
