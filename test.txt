@@ -10,8 +10,19 @@ int test = 2;
 
 if ( 5 > 4) {
     print(hola);
+} else {
+    print(ring);
 }
 
-while (hola > 1) {
+// Comentario test
+
+
+while (hola > 1) 
+
+{
+    int hola;
+}
+
+{
     print(hola);
 }

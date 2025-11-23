@@ -1,4 +1,5 @@
 #include "Lexer.hpp"
+#include <iostream>
 #include "../ErrorHandler.h"
 
 enum class State
@@ -60,7 +61,6 @@ Token Lexer::nextToken()
             // Manejo de comentarios
             else if (currentChar == '/')
             {
-                text += static_cast<char>(currentChar);
                 currentChar = in.get();
                 state = State::COMMENT_Q1;
             }
@@ -178,13 +178,13 @@ Token Lexer::nextToken()
                      currentChar == '>' || currentChar == '!' || currentChar == '&' ||
                      currentChar == '|' || currentChar == '+' || currentChar == '-' ||
                      currentChar == '*' || currentChar == '%' || currentChar == ',' ||
-                     currentChar == '(' || currentChar == ')' || currentChar == '{' ||
-                     currentChar == '}')
+                     currentChar == '(' || currentChar == ')' || currentChar == '{' || currentChar == '}')
             {
                 if (currentChar == '\n')
                 {
                     incrementLineNumber();
                 }
+
                 if (text == "int")
                 {
                     return Token::KEYWORD_INT;
@@ -331,6 +331,7 @@ Token Lexer::nextToken()
             }
             else
             {
+                text += '/';
                 return Token::DIV_OPERATOR;
             }
             break;
@@ -338,13 +339,13 @@ Token Lexer::nextToken()
         case State::COMMENT_Q2:
             if (currentChar != '\n' && currentChar != EOF)
             {
-                currentChar = in.get();
                 state = State::COMMENT_Q2;
             }
             else
             {
                 state = State::Q0;
             }
+            currentChar = in.get();
             break;
 
         case State::END_OF_FILE_Q1:
