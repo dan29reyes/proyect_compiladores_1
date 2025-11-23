@@ -1,6 +1,6 @@
-#include <fstream> 
+#include <fstream>
 #include <iostream>
-#include "Lexer/Lexer.hpp"
+#include "Parser/Parser.hpp"
 
 using namespace std;
 
@@ -12,23 +12,24 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  std::ifstream in(argv[1]);
-
-  if (!in)
+  try
   {
-    std::cerr << "Could not open file\n";
+    std::ifstream in(argv[1]);
+
+    if (!in)
+    {
+      std::cerr << "Could not open file\n";
+      return 1;
+    }
+
+    Parser parser(in);
+
+    in.close();
+  }
+  catch (const std::runtime_error &e)
+  {
+    std::cerr << e.what() << std::endl;
     return 1;
   }
-
-  Lexer lexer(in);
-
-  Token token = lexer.nextToken();
-  while (token != Token::END_OF_FILE)
-  {
-    std::cout << "Token: " << Lexer::tokenToString(token) << ", text: " << lexer.getText() << "\n";
-    token = lexer.nextToken();
-  }
-
-  in.close();
   return 0;
 }

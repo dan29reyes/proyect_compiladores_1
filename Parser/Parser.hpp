@@ -1,5 +1,6 @@
 #include "../Lexer/Lexer.hpp"
 #include <string>
+#include <iostream>
 
 class Parser
 {
@@ -10,7 +11,6 @@ public:
         while (currToken != Token::END_OF_FILE)
         {
             Statement();
-            currToken = lexer.nextToken();
         }
     }
     ~Parser() {}

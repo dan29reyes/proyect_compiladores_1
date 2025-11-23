@@ -3,6 +3,7 @@
 
 void Parser::Statement()
 {
+    std::cout << "Parsing Statement at line " << lexer.getLineNumber() << std::endl;
     switch (currToken)
     {
     case Token::KEYWORD_INT:
@@ -36,6 +37,7 @@ void Parser::VarDecl()
         ErrorHandler::throwUnexpectedTokenError("int", Lexer::tokenToString(currToken));
     }
     currToken = lexer.nextToken();
+    std::cout << "Token: " << Lexer::tokenToString(currToken) << " at line " << lexer.getLineNumber() << std::endl;
     if (currToken != Token::IDENTIFIER)
     {
         ErrorHandler::throwUnexpectedTokenError("identifier", Lexer::tokenToString(currToken));
@@ -51,6 +53,7 @@ void Parser::VarDecl()
         ErrorHandler::throwUnexpectedTokenError("= or ;", Lexer::tokenToString(currToken));
     }
     currToken = lexer.nextToken();
+    std::cout << "Finished parsing VarDecl at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Assignment()
@@ -71,6 +74,7 @@ void Parser::Assignment()
         ErrorHandler::throwUnexpectedTokenError(";", Lexer::tokenToString(currToken));
     }
     currToken = lexer.nextToken();
+    std::cout << "Finished parsing Assignment at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::IfStmt()
@@ -92,6 +96,7 @@ void Parser::IfStmt()
     }
     currToken = lexer.nextToken();
     Statement();
+    std::cout << "Finished parsing IfStmt at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::WhileStmt()
@@ -113,6 +118,7 @@ void Parser::WhileStmt()
     }
     currToken = lexer.nextToken();
     Statement();
+    std::cout << "Finished parsing WhileStmt at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::PrintStmt()
@@ -138,6 +144,7 @@ void Parser::PrintStmt()
         ErrorHandler::throwUnexpectedTokenError(";", Lexer::tokenToString(currToken));
     }
     currToken = lexer.nextToken();
+    std::cout << "Finished parsing PrintStmt at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Block()
@@ -152,6 +159,7 @@ void Parser::Block()
         Statement();
     }
     currToken = lexer.nextToken();
+    std::cout << "Finished parsing Block at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Expression()
@@ -167,6 +175,7 @@ void Parser::LogicalOr()
         currToken = lexer.nextToken();
         LogicalAnd();
     }
+    std::cout << "Finished parsing LogicalOr at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::LogicalAnd()
@@ -177,6 +186,7 @@ void Parser::LogicalAnd()
         currToken = lexer.nextToken();
         Equality();
     }
+    std::cout << "Finished parsing LogicalAnd at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Equality()
@@ -187,6 +197,7 @@ void Parser::Equality()
         currToken = lexer.nextToken();
         Comparison();
     }
+    std::cout << "Finished parsing Equality at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Comparison()
@@ -197,6 +208,7 @@ void Parser::Comparison()
         currToken = lexer.nextToken();
         Term();
     }
+    std::cout << "Finished parsing Comparison at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Term()
@@ -207,6 +219,7 @@ void Parser::Term()
         currToken = lexer.nextToken();
         Factor();
     }
+    std::cout << "Finished parsing Term at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Factor()
@@ -217,6 +230,7 @@ void Parser::Factor()
         currToken = lexer.nextToken();
         Unary();
     }
+    std::cout << "Finished parsing Factor at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Unary()
@@ -230,6 +244,7 @@ void Parser::Unary()
     {
         Primary();
     }
+    std::cout << "Finished parsing Unary at line " << lexer.getLineNumber() << std::endl;
 }
 
 void Parser::Primary()
@@ -252,4 +267,5 @@ void Parser::Primary()
     {
         ErrorHandler::throwUnexpectedTokenError("a primary expression", Lexer::tokenToString(currToken));
     }
+    std::cout << "Finished parsing Primary at line " << lexer.getLineNumber() << std::endl;
 }
