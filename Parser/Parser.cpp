@@ -156,26 +156,57 @@ void Parser::Block()
 
 void Parser::Expression()
 {
+    LogicalOr();
 }
 
 void Parser::LogicalOr()
 {
+    LogicalAnd();
+    while (currToken == Token::OR_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        LogicalAnd();
+    }
 }
 
 void Parser::LogicalAnd()
 {
+    Equality();
+    while (currToken == Token::AND_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        Equality();
+    }
 }
 
 void Parser::Equality()
 {
+    Comparison();
+    while (currToken == Token::EQUAL_OPERATOR || currToken == Token::NOT_EQUAL_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        Comparison();
+    }
 }
 
 void Parser::Comparison()
 {
+    Term();
+    while (currToken == Token::LESS_OPERATOR || currToken == Token::GREATER_OPERATOR || currToken == Token::LESS_EQUAL_OPERATOR || currToken == Token::GREATER_EQUAL_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        Term();
+    }
 }
 
 void Parser::Term()
 {
+    Factor();
+    while (currToken == Token::ADD_OPERATOR || currToken == Token::SUB_OPERATOR)
+    {
+        currToken = lexer.nextToken();
+        Factor();
+    }
 }
 
 void Parser::Factor()
