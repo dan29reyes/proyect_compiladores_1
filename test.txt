@@ -3,7 +3,7 @@ if while else
 
 
 
-? >?
+>
 
 int contador = 10, 15, -10248092835, 0012;
 

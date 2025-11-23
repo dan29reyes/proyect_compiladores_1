@@ -39,8 +39,8 @@ Token Lexer::nextToken()
                 state = State::NUMBER_Q1;
             }
             // Manejo de identificadores y palabras clave
-            else if (currentChar >= 'a' && currentChar <= 'z' ||
-                     currentChar >= 'A' && currentChar <= 'Z' ||
+            else if ((currentChar >= 'a' && currentChar <= 'z') ||
+                     (currentChar >= 'A' && currentChar <= 'Z') ||
                      currentChar == '_')
             {
                 text += static_cast<char>(currentChar);
@@ -164,9 +164,9 @@ Token Lexer::nextToken()
             break;
 
         case State::IDENTIFIER_Q1:
-            if (currentChar >= 'a' && currentChar <= 'z' ||
-                currentChar >= 'A' && currentChar <= 'Z' ||
-                currentChar == '_' || currentChar >= '0' && currentChar <= '9')
+            if ((currentChar >= 'a' && currentChar <= 'z') ||
+                (currentChar >= 'A' && currentChar <= 'Z') ||
+                currentChar == '_' || (currentChar >= '0' && currentChar <= '9'))
             {
                 text += static_cast<char>(currentChar);
                 currentChar = in.get();

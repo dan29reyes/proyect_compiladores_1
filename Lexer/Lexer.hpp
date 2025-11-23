@@ -22,6 +22,8 @@ public:
 
     void incrementLineNumber() { ++lineNumber; }
 
+    ~Lexer() {}
+
 private:
     std::istream &in;
     std::string text;
