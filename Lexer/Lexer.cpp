@@ -174,7 +174,12 @@ Token Lexer::nextToken()
             }
             else if (currentChar == ' ' || currentChar == '\t' || currentChar == EOF ||
                      currentChar == '\n' || currentChar == '\r' || currentChar == '/' ||
-                     currentChar == ';' || currentChar == '=')
+                     currentChar == ';' || currentChar == '=' || currentChar == '<' ||
+                     currentChar == '>' || currentChar == '!' || currentChar == '&' ||
+                     currentChar == '|' || currentChar == '+' || currentChar == '-' ||
+                     currentChar == '*' || currentChar == '%' || currentChar == ',' ||
+                     currentChar == '(' || currentChar == ')' || currentChar == '{' ||
+                     currentChar == '}')
             {
                 if (currentChar == '\n')
                 {

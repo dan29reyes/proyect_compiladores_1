@@ -1,7 +1,17 @@
 int contador;
 
-int testa = 1;
+print (hola);
 
-int number=1;
+int testa = 1 + 2;
+
+int number= 1 * (2 + (1 * hola));
 
 int test = 2;
+
+if ( 5 > 4) {
+    print(hola);
+}
+
+while (hola > 1) {
+    print(hola);
+}
