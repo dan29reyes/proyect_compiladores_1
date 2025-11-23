@@ -3,7 +3,6 @@
 
 void Parser::Statement()
 {
-    std::cout << "Parsing Statement at line " << lexer.getLineNumber() << std::endl;
     switch (currToken)
     {
     case Token::KEYWORD_INT:
@@ -37,7 +36,6 @@ void Parser::VarDecl()
         ErrorHandler::throwUnexpectedTokenError("int", Lexer::tokenToString(currToken));
     }
     currToken = lexer.nextToken();
-    std::cout << "Token: " << Lexer::tokenToString(currToken) << " at line " << lexer.getLineNumber() << std::endl;
     if (currToken != Token::IDENTIFIER)
     {
         ErrorHandler::throwUnexpectedTokenError("identifier", Lexer::tokenToString(currToken));

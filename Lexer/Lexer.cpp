@@ -173,8 +173,13 @@ Token Lexer::nextToken()
                 state = State::IDENTIFIER_Q1;
             }
             else if (currentChar == ' ' || currentChar == '\t' || currentChar == EOF ||
-                     currentChar == '\n' || currentChar == '\r' || currentChar == '/')
+                     currentChar == '\n' || currentChar == '\r' || currentChar == '/' ||
+                     currentChar == ';' || currentChar == '=')
             {
+                if (currentChar == '\n')
+                {
+                    incrementLineNumber();
+                }
                 if (text == "int")
                 {
                     return Token::KEYWORD_INT;
@@ -300,6 +305,10 @@ Token Lexer::nextToken()
         case State::SPACES_Q1:
             if (currentChar == ' ' || currentChar == '\t' || currentChar == '\n' || currentChar == '\r')
             {
+                if (currentChar == '\n')
+                {
+                    incrementLineNumber();
+                }
                 currentChar = in.get();
                 state = State::SPACES_Q1;
             }

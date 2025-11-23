@@ -1,1 +1,7 @@
 int contador;
+
+int testa = 1;
+
+int number=1;
+
+int test = 2;
