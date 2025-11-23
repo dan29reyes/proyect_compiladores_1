@@ -1,4 +1,3 @@
-#pragma once
 #include "../Lexer/Lexer.hpp"
 #include <string>
 
@@ -18,4 +17,24 @@ public:
 private:
     Lexer lexer;
     Token currToken;
+
+    // Instrucciones
+    void Statement();
+    void VarDecl();
+    void Assignment();
+    void IfStmt();
+    void WhileStmt();
+    void PrintStmt();
+    void Block();
+
+    // Expresiones
+    void Expression();
+    void LogicalOr();
+    void LogicalAnd();
+    void Equality();
+    void Comparison();
+    void Term();
+    void Factor();
+    void Unary();
+    void Primary();
 };
