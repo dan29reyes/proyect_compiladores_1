@@ -55,10 +55,42 @@ void Parser::VarDecl()
 
 void Parser::Assignment()
 {
+    if (currToken != Token::IDENTIFIER)
+    {
+        ErrorHandler::throwUnexpectedTokenError("identifier", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    if (currToken != Token::ASSIGNMENT)
+    {
+        ErrorHandler::throwUnexpectedTokenError("=", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    Expression();
+    if (currToken != Token::SEMICOLON)
+    {
+        ErrorHandler::throwUnexpectedTokenError(";", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
 }
 
 void Parser::IfStmt()
 {
+    if (currToken != Token::KEYWORD_IF)
+    {
+        ErrorHandler::throwUnexpectedTokenError("if", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    if (currToken != Token::LEFT_PAREN)
+    {
+        ErrorHandler::throwUnexpectedTokenError("(", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    Expression();
+    if (currToken != Token::RIGHT_PAREN)
+    {
+        ErrorHandler::throwUnexpectedTokenError(")", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
 }
 
 void Parser::WhileStmt()
