@@ -91,18 +91,67 @@ void Parser::IfStmt()
         ErrorHandler::throwUnexpectedTokenError(")", Lexer::tokenToString(currToken));
     }
     currToken = lexer.nextToken();
+    Statement();
 }
 
 void Parser::WhileStmt()
 {
+    if (currToken != Token::KEYWORD_WHILE)
+    {
+        ErrorHandler::throwUnexpectedTokenError("while", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    if (currToken != Token::LEFT_PAREN)
+    {
+        ErrorHandler::throwUnexpectedTokenError("(", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    Expression();
+    if (currToken != Token::RIGHT_PAREN)
+    {
+        ErrorHandler::throwUnexpectedTokenError(")", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    Statement();
 }
 
 void Parser::PrintStmt()
 {
+    if (currToken != Token::KEYWORD_PRINT)
+    {
+        ErrorHandler::throwUnexpectedTokenError("print", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    if (currToken != Token::LEFT_PAREN)
+    {
+        ErrorHandler::throwUnexpectedTokenError("(", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    Expression();
+    if (currToken != Token::RIGHT_PAREN)
+    {
+        ErrorHandler::throwUnexpectedTokenError(")", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    if (currToken != Token::SEMICOLON)
+    {
+        ErrorHandler::throwUnexpectedTokenError(";", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
 }
 
 void Parser::Block()
 {
+    if (currToken != Token::LEFT_BRACE)
+    {
+        ErrorHandler::throwUnexpectedTokenError("{", Lexer::tokenToString(currToken));
+    }
+    currToken = lexer.nextToken();
+    while (currToken != Token::RIGHT_BRACE)
+    {
+        Statement();
+    }
+    currToken = lexer.nextToken();
 }
 
 void Parser::Expression()
