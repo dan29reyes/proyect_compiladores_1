@@ -3,6 +3,9 @@
 [a-zA-Z_]+      	{ return Token::IDENTIFIER }
 [ \t\r\n]*		    { /* IGNORAR */ }
 [/]                 { return Token::DIV_OPERATOR }
+[/][*]+[^*]+
+[/][*]+([^*]*|[*]+[^\/])*[*]+[/] { /* IGNORAR */ }
+[[][^]]*[]]	    { return Token::BRACKET_IDENT }
 [+]                 { return Token::ADD_OPERATOR }
 [*]                 { return Token::MULT_OPERATOR }
 [-]                 { return Token::SUB_OPERATOR }

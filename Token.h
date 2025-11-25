@@ -1,5 +1,7 @@
 enum class Token
 {
+	BRACKET_IDENT,
+
     // Token para fin de archivo
     END_OF_FILE,
 

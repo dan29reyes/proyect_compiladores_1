@@ -11,6 +11,10 @@ enum class State
     SPACES_Q1,
     COMMENT_Q1,
     COMMENT_Q2,
+    BRACKET_IDENT_Q1,
+    COMMENT_BOX_Q1,
+    COMMENT_BOX_Q2,
+    COMMENT_BOX_Q3,
     OPERATOR_Q1,
     OPERATOR_Q2,
     AND_Q1,
@@ -145,6 +149,12 @@ Token Lexer::nextToken()
                 currentChar = in.get();
                 state = State::OR_Q1;
             }
+            else if (currentChar == '[')
+            {
+            	text += static_cast<char>(currentChar);
+            	currentChar = in.get();
+            	state = State::BRACKET_IDENT_Q1;
+            }
             else
             {
                 ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
@@ -162,6 +172,22 @@ Token Lexer::nextToken()
                 return Token::NUMBER;
             }
             break;
+            
+        case State::BRACKET_IDENT_Q1:
+        	if (currentChar != ']' && currentChar != '\n')
+        	{
+        		text += static_cast<char>(currentChar);
+        		currentChar = in.get();
+        		state = State::BRACKET_IDENT_Q1;
+        	}
+        	else if (currentChar != '\n')
+        	{
+        		ErrorHandler::throwInvalidCharacterError(static_cast<char>(currentChar), getLineNumber());
+        	}
+        	else
+        	{
+        		return Token::BRACKET_IDENT;
+        	}
 
         case State::IDENTIFIER_Q1:
             if ((currentChar >= 'a' && currentChar <= 'z') ||
@@ -329,6 +355,11 @@ Token Lexer::nextToken()
                 currentChar = in.get();
                 state = State::COMMENT_Q2;
             }
+            else if (currentChar == '*')
+            {
+            	currentChar = in.get();
+            	state = State::COMMENT_BOX_Q1;
+            }
             else
             {
                 text += '/';
@@ -348,6 +379,39 @@ Token Lexer::nextToken()
             currentChar = in.get();
             break;
 
+	case State::COMMENT_BOX_Q1:
+		if (currentChar == '*')
+		{
+			state = State::COMMENT_BOX_Q1;
+		}
+		else
+		{
+			state = State::COMMENT_BOX_Q2;
+		}
+		currentChar = in.get();
+		
+	case State::COMMENT_BOX_Q2:
+		if (currentChar == '*')
+		{
+			state = State::COMMENT_BOX_Q3;
+		}
+		else if (currentChar == '/')
+		{	
+			state = State::Q0;
+		}
+		else
+		{
+			state = State::COMMENT_BOX_Q1;
+		}
+		currentChar = in.get();
+		
+	case State::COMMENT_BOX_Q3:
+		if (currentChar == '/')
+		{
+			state = State::Q0;
+		}
+		currentChar = in.get();
+	
         case State::END_OF_FILE_Q1:
             return Token::END_OF_FILE;
             break;

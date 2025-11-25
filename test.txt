@@ -26,3 +26,13 @@ while (hola > 1)
 {
     print(hola);
 }
+
+/*
+holasdklj**
+*/
+
+/*/
+
+/****/
+
+print(h);
