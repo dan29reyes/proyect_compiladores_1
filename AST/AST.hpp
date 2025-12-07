@@ -11,7 +11,6 @@ namespace AST
         virtual ~Node() = default;
 
         virtual std::string toString() const = 0;
-
         Kind getKind() const { return kind; }
 
     private:
@@ -25,12 +24,14 @@ namespace AST
     {
     public:
         Expr(Kind k) : Node(k) {}
+        virtual std::string toString() const override = 0;
     };
 
     class Statement : public Node
     {
     public:
         Statement(Kind k) : Node(k) {}
+        virtual std::string toString() const override = 0;
     };
 
     // Statement Nodes
@@ -38,6 +39,7 @@ namespace AST
     {
     public:
         VarDecl(const std::string &n, std::unique_ptr<Expr> init = nullptr) : Statement(Kind::VarDecl), name(n), initializer(std::move(init)) {}
+        virtual std::string toString() const override;
 
     private:
         std::string name;
@@ -48,6 +50,7 @@ namespace AST
     {
     public:
         Assignment(const std::string &n, std::unique_ptr<Expr> val) : Statement(Kind::Assignment), name(n), value(std::move(val)) {}
+        virtual std::string toString() const override;
 
     private:
         std::string name;
@@ -58,6 +61,7 @@ namespace AST
     {
     public:
         IfStmt(std::unique_ptr<Expr> cond, std::unique_ptr<Statement> trueBranch, std::unique_ptr<Statement> falseBranch = nullptr) : Statement(Kind::If), cond(std::move(cond)), whenTrueBranch(std::move(trueBranch)), whenFalseBranch(std::move(falseBranch)) {}
+        virtual std::string toString() const override;
 
     private:
         std::unique_ptr<Expr> cond;
@@ -69,6 +73,7 @@ namespace AST
     {
     public:
         WhileStmt(std::unique_ptr<Expr> cond, std::unique_ptr<Statement> stmt) : Statement(Kind::While), cond(std::move(cond)), stmt(std::move(stmt)) {}
+        virtual std::string toString() const override;
 
     private:
         std::unique_ptr<Expr> cond;
@@ -79,6 +84,7 @@ namespace AST
     {
     public:
         PrintStmt(std::unique_ptr<Expr> expr) : Statement(Kind::Print), expr(std::move(expr)) {}
+        virtual std::string toString() const override;
 
     private:
         std::unique_ptr<Expr> expr;
@@ -89,6 +95,7 @@ namespace AST
     {
     public:
         NumberLiteral(int v) : Expr(Kind::Number), value(v) {}
+        virtual std::string toString() const override;
 
     private:
         int value;
@@ -98,6 +105,7 @@ namespace AST
     {
     public:
         Identifier(const std::string &n) : Expr(Kind::Identifier), name(n) {}
+        virtual std::string toString() const override;
 
     private:
         std::string name;
@@ -107,6 +115,7 @@ namespace AST
     {
     public:
         RelationalExpr(RelationalOperator op, std::unique_ptr<Expr> l, std::unique_ptr<Expr> r) : Expr(Kind::RelationalExpr), op(op), left(std::move(l)), right(std::move(r)) {}
+        virtual std::string toString() const override;
 
     private:
         RelationalOperator op;
