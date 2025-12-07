@@ -34,19 +34,10 @@ namespace AST
     };
 
     // Statement Nodes
-    class PrintStmt : public Statement
-    {
-    public:
-        PrintStmt(std::unique_ptr<Expr> expr) : Statement(Kind::Print), expr(std::move(expr)) {}
-
-    private:
-        std::unique_ptr<Expr> expr;
-    };
-
     class VarDecl : public Statement
     {
     public:
-        VarDecl(const std::string &n, std::unique_ptr<Expr> init) : Statement(Kind::VarDecl), name(n), initializer(std::move(init)) {}
+        VarDecl(const std::string &n, std::unique_ptr<Expr> init = nullptr) : Statement(Kind::VarDecl), name(n), initializer(std::move(init)) {}
 
     private:
         std::string name;
@@ -72,6 +63,25 @@ namespace AST
         std::unique_ptr<Expr> cond;
         std::unique_ptr<Statement> whenTrueBranch;
         std::unique_ptr<Statement> whenFalseBranch;
+    };
+
+    class WhileStmt : public Statement
+    {
+    public:
+        WhileStmt(std::unique_ptr<Expr> cond, std::unique_ptr<Statement> stmt) : Statement(Kind::While), cond(std::move(cond)), stmt(std::move(stmt)) {}
+
+    private:
+        std::unique_ptr<Expr> cond;
+        std::unique_ptr<Statement> stmt;
+    };
+
+    class PrintStmt : public Statement
+    {
+    public:
+        PrintStmt(std::unique_ptr<Expr> expr) : Statement(Kind::Print), expr(std::move(expr)) {}
+
+    private:
+        std::unique_ptr<Expr> expr;
     };
 
     // Expression Nodes
