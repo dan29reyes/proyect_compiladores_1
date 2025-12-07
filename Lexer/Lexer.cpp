@@ -1,6 +1,6 @@
 #include "Lexer.hpp"
 #include <iostream>
-#include "../ErrorHandler.h"
+#include "../ErrorHandler.hpp"
 
 enum class State
 {

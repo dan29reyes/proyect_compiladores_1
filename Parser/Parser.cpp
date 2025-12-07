@@ -1,5 +1,5 @@
 #include "Parser.hpp"
-#include "../ErrorHandler.h"
+#include "../ErrorHandler.hpp"
 
 void Parser::Statement()
 {

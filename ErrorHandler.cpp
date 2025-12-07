@@ -1,4 +1,4 @@
-#include "ErrorHandler.h"
+#include "ErrorHandler.hpp"
 #include <stdexcept>
 #include <sstream>
 
