@@ -117,7 +117,10 @@ namespace AST
     class RelationalExpr : public Expr
     {
     public:
-        RelationalExpr(RelationalOperator op, std::unique_ptr<Expr> l, std::unique_ptr<Expr> r) : Expr(Kind::RelationalExpr), op(op), left(std::move(l)), right(std::move(r)) {}
+        // Relacion unica
+        RelationalExpr(std::unique_ptr<Expr> l) : Expr(Kind::RelationalExpr), op(RelationalOperator::No_Op), left(std::move(l)), right(nullptr) {}
+        // Relacion completa
+        RelationalExpr(std::unique_ptr<Expr> l, RelationalOperator op, std::unique_ptr<Expr> r = nullptr) : Expr(Kind::RelationalExpr), op(op), left(std::move(l)), right(std::move(r)) {}
         virtual std::string toString() const override;
 
     private:
@@ -134,6 +137,29 @@ namespace AST
             return "Int";
         default:
             return "UnknownType";
+        }
+    }
+
+    inline std::string relOperatorToString(RelationalOperator op)
+    {
+        switch (op)
+        {
+        case RelationalOperator::Equal:
+            return "=";
+        case RelationalOperator::GreaterThan:
+            return ">";
+        case RelationalOperator::GreaterThanOrEqual:
+            return ">=";
+        case RelationalOperator::LessThan:
+            return "<";
+        case RelationalOperator::LessThanOrEqual:
+            return "<=";
+        case RelationalOperator::NotEqual:
+            return "!=";
+        case RelationalOperator::No_Op:
+            return "no_op";
+        default:
+            return "UnknownOp";
         }
     }
 };

@@ -38,6 +38,22 @@ namespace AST
         return "print(" + expr->toString() + ")";
     }
 
+    // Expr
+    std::string RelationalExpr::toString() const
+    {
+        std::string leftStr = left->toString();
+        if (op != RelationalOperator::No_Op)
+        {
+            std::string relOp = relOperatorToString(op);
+            std::string rightStr = right->toString();
+            return leftStr + " " + relOp + " " + rightStr;
+        }
+        else
+        {
+            return leftStr;
+        }
+    }
+
     std::string NumberLiteral::toString() const
     {
         return std::to_string(value);
@@ -46,11 +62,5 @@ namespace AST
     std::string Identifier::toString() const
     {
         return name;
-    }
-
-    // Expr
-    std::string RelationalExpr::toString() const
-    {
-        
     }
 };

@@ -18,7 +18,8 @@ enum class RelationalOperator
     GreaterThan,
     GreaterThanOrEqual,
     Equal,
-    NotEqual
+    NotEqual,
+    No_Op
 };
 
 enum class DataType
