@@ -38,10 +38,13 @@ namespace AST
     class VarDecl : public Statement
     {
     public:
-        VarDecl(const std::string &n, std::unique_ptr<Expr> init = nullptr) : Statement(Kind::VarDecl), name(n), initializer(std::move(init)) {}
+        VarDecl(DataType t, const std::string &n, std::unique_ptr<Expr> init = nullptr) : Statement(Kind::VarDecl), type(t), name(n), initializer(std::move(init)) {}
         virtual std::string toString() const override;
 
+        DataType getType() const { return type; }
+
     private:
+        DataType type;
         std::string name;
         std::unique_ptr<Expr> initializer;
     };
@@ -123,4 +126,14 @@ namespace AST
         std::unique_ptr<Expr> right;
     };
 
+    inline std::string dataTypeToString(DataType t)
+    {
+        switch (t)
+        {
+        case DataType::Int:
+            return "Int";
+        default:
+            return "UnknownType";
+        }
+    }
 };

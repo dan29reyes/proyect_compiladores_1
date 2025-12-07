@@ -5,6 +5,12 @@ namespace AST
     // Statement
     std::string VarDecl::toString() const
     {
+        std::string s = dataTypeToString(type) + " " + name;
+        if (initializer)
+        {
+            s += " = " + initializer->toString();
+        }
+        return s;
     }
 
     std::string Assignment::toString() const

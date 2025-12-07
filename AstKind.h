@@ -1,4 +1,5 @@
-enum class Kind {
+enum class Kind
+{
     Print,
     VarDecl,
     Assignment,
@@ -10,11 +11,17 @@ enum class Kind {
     RelationalExpr
 };
 
-enum class RelationalOperator {
+enum class RelationalOperator
+{
     LessThan,
     LessThanOrEqual,
     GreaterThan,
     GreaterThanOrEqual,
     Equal,
     NotEqual
+};
+
+enum class DataType
+{
+    Int,
 };
