@@ -39,19 +39,20 @@ namespace AST
     }
 
     // Expr
-    std::string RelationalExpr::toString() const
+    std::string BinRelationalExpr::toString() const
     {
-        std::string leftStr = left->toString();
+        return left->toString() + " " + relOperatorToString(op) + " " + right->toString();
+    }
+
+    std::string UniRelationalExpr::toString() const
+    {
+        std::string s = "";
         if (op != RelationalOperator::No_Op)
         {
-            std::string relOp = relOperatorToString(op);
-            std::string rightStr = right->toString();
-            return leftStr + " " + relOp + " " + rightStr;
+            s += relOperatorToString(op) + " ";
         }
-        else
-        {
-            return leftStr;
-        }
+        s += left->toString();
+        return s;
     }
 
     std::string NumberLiteral::toString() const

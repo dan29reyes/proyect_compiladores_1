@@ -17,80 +17,97 @@ namespace AST
         Kind kind;
     };
 
+    class Node;
     using NodePtr = std::unique_ptr<Node>;
+    class Expr;
+    using ExprPtr = std::unique_ptr<Expr>;
+    class Statement;
+    using StatementPtr = std::unique_ptr<Statement>;
 
     // Nodes
     class Expr : public Node
     {
     public:
         Expr(Kind k) : Node(k) {}
-        virtual std::string toString() const override = 0;
     };
 
     class Statement : public Node
     {
     public:
         Statement(Kind k) : Node(k) {}
-        virtual std::string toString() const override = 0;
     };
 
     // Statement Nodes
     class VarDecl : public Statement
     {
     public:
-        VarDecl(DataType t, const std::string &n, std::unique_ptr<Expr> init = nullptr) : Statement(Kind::VarDecl), type(t), name(n), initializer(std::move(init)) {}
-        virtual std::string toString() const override;
+        VarDecl(DataType t, const std::string &n, ExprPtr init = nullptr) : Statement(Kind::VarDecl), type(t), name(n), initializer(std::move(init)) {}
 
+        std::string toString() const override;
         DataType getType() const { return type; }
+        std::string getName() const { return name; }
+        const Expr *getInitializer() const { return initializer.get(); }
 
     private:
         DataType type;
         std::string name;
-        std::unique_ptr<Expr> initializer;
+        ExprPtr initializer;
     };
 
     class Assignment : public Statement
     {
     public:
-        Assignment(const std::string &n, std::unique_ptr<Expr> val) : Statement(Kind::Assignment), name(n), value(std::move(val)) {}
-        virtual std::string toString() const override;
+        Assignment(const std::string &n, ExprPtr val) : Statement(Kind::Assignment), name(n), value(std::move(val)) {}
+
+        std::string toString() const override;
+        std::string getName() const { return name; }
+        const Expr *getValue() const { return value.get(); }
 
     private:
         std::string name;
-        std::unique_ptr<Expr> value;
+        ExprPtr value;
     };
 
     class IfStmt : public Statement
     {
     public:
-        IfStmt(std::unique_ptr<Expr> cond, std::unique_ptr<Statement> trueBranch, std::unique_ptr<Statement> falseBranch = nullptr) : Statement(Kind::If), cond(std::move(cond)), whenTrueBranch(std::move(trueBranch)), whenFalseBranch(std::move(falseBranch)) {}
-        virtual std::string toString() const override;
+        IfStmt(ExprPtr cond, StatementPtr trueBranch, StatementPtr falseBranch = nullptr) : Statement(Kind::If), cond(std::move(cond)), whenTrueBranch(std::move(trueBranch)), whenFalseBranch(std::move(falseBranch)) {}
+
+        std::string toString() const override;
+        const Expr *getCondition() const { return cond.get(); }
+        const Statement *getTrueBranch() const { return whenTrueBranch.get(); }
+        const Statement *getFalseBranch() const { return whenFalseBranch.get(); }
 
     private:
-        std::unique_ptr<Expr> cond;
-        std::unique_ptr<Statement> whenTrueBranch;
-        std::unique_ptr<Statement> whenFalseBranch;
+        ExprPtr cond;
+        StatementPtr whenTrueBranch;
+        StatementPtr whenFalseBranch;
     };
 
     class WhileStmt : public Statement
     {
     public:
-        WhileStmt(std::unique_ptr<Expr> cond, std::unique_ptr<Statement> stmt) : Statement(Kind::While), cond(std::move(cond)), stmt(std::move(stmt)) {}
-        virtual std::string toString() const override;
+        WhileStmt(ExprPtr cond, StatementPtr stmt) : Statement(Kind::While), cond(std::move(cond)), stmt(std::move(stmt)) {}
+
+        std::string toString() const override;
+        const Expr *getCondition() const { return cond.get(); }
+        const Statement *getStatement() const { return stmt.get(); }
 
     private:
-        std::unique_ptr<Expr> cond;
-        std::unique_ptr<Statement> stmt;
+        ExprPtr cond;
+        StatementPtr stmt;
     };
 
     class PrintStmt : public Statement
     {
     public:
-        PrintStmt(std::unique_ptr<Expr> expr) : Statement(Kind::Print), expr(std::move(expr)) {}
-        virtual std::string toString() const override;
+        PrintStmt(ExprPtr expr) : Statement(Kind::Print), expr(std::move(expr)) {}
+
+        std::string toString() const override;
+        const Expr *getExpression() const { return expr.get(); }
 
     private:
-        std::unique_ptr<Expr> expr;
+        ExprPtr expr;
     };
 
     // Expression Nodes
@@ -98,7 +115,9 @@ namespace AST
     {
     public:
         NumberLiteral(int v) : Expr(Kind::Number), value(v) {}
-        virtual std::string toString() const override;
+
+        std::string toString() const override;
+        int getValue() const { return value; }
 
     private:
         int value;
@@ -108,25 +127,42 @@ namespace AST
     {
     public:
         Identifier(const std::string &n) : Expr(Kind::Identifier), name(n) {}
-        virtual std::string toString() const override;
+
+        std::string toString() const override;
+        std::string getName() const { return name; }
 
     private:
         std::string name;
     };
 
-    class RelationalExpr : public Expr
+    class BinRelationalExpr : public Expr
     {
     public:
-        // Relacion unica
-        RelationalExpr(std::unique_ptr<Expr> l) : Expr(Kind::RelationalExpr), op(RelationalOperator::No_Op), left(std::move(l)), right(nullptr) {}
-        // Relacion completa
-        RelationalExpr(std::unique_ptr<Expr> l, RelationalOperator op, std::unique_ptr<Expr> r = nullptr) : Expr(Kind::RelationalExpr), op(op), left(std::move(l)), right(std::move(r)) {}
-        virtual std::string toString() const override;
+        BinRelationalExpr(ExprPtr l, RelationalOperator op, ExprPtr r) : Expr(Kind::RelationalExpr), op(op), left(std::move(l)), right(std::move(r)) {}
+
+        std::string toString() const override;
+        RelationalOperator getOperator() const { return op; }
+        const Expr *getLeft() const { return left.get(); }
+        const Expr *getRight() const { return right.get(); }
 
     private:
         RelationalOperator op;
-        std::unique_ptr<Expr> left;
-        std::unique_ptr<Expr> right;
+        ExprPtr left;
+        ExprPtr right;
+    };
+
+    class UniRelationalExpr : public Expr
+    {
+    public:
+        UniRelationalExpr(RelationalOperator op, ExprPtr l) : Expr(Kind::RelationalExpr), op(op), left(std::move(l)) {}
+
+        std::string toString() const override;
+        RelationalOperator getOperator() const { return op; }
+        const Expr *getLeft() const { return left.get(); }
+
+    private:
+        RelationalOperator op;
+        ExprPtr left;
     };
 
     inline std::string dataTypeToString(DataType t)
@@ -156,8 +192,6 @@ namespace AST
             return "<=";
         case RelationalOperator::NotEqual:
             return "!=";
-        case RelationalOperator::No_Op:
-            return "no_op";
         default:
             return "UnknownOp";
         }
