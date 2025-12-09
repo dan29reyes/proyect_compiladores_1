@@ -192,6 +192,8 @@ namespace AST
             return "<=";
         case RelationalOperator::NotEqual:
             return "!=";
+        case RelationalOperator::Not:
+            return "!";
         default:
             return "UnknownOp";
         }

@@ -5,63 +5,63 @@ namespace AST
     // Statement
     std::string VarDecl::toString() const
     {
-        std::string s = dataTypeToString(type) + " " + name;
+        std::string s = dataTypeToString(type) + " " + getName();
         if (initializer)
         {
-            s += " = " + initializer->toString();
+            s += " = " + getInitializer()->toString();
         }
         return s;
     }
 
     std::string Assignment::toString() const
     {
-        return name + " = " + value->toString();
+        return getName() + " = " + getValue()->toString();
     }
 
     std::string IfStmt::toString() const
     {
-        std::string s = "if (" + cond->toString() + ")" + whenTrueBranch->toString();
-        if (whenFalseBranch)
+        std::string s = "if (" + getCondition()->toString() + ")" + getTrueBranch()->toString();
+        if (getFalseBranch())
         {
-            s += " else " + whenFalseBranch->toString();
+            s += " else " + getFalseBranch()->toString();
         }
         return s;
     }
 
     std::string WhileStmt::toString() const
     {
-        return "while (" + cond->toString() + ")" + stmt->toString();
+        return "while (" + getCondition()->toString() + ")" + getStatement()->toString();
     }
 
     std::string PrintStmt::toString() const
     {
-        return "print(" + expr->toString() + ")";
+        return "print(" + getExpression()->toString() + ")";
     }
 
     // Expr
     std::string BinRelationalExpr::toString() const
     {
-        return left->toString() + " " + relOperatorToString(op) + " " + right->toString();
+        return getLeft()->toString() + " " + relOperatorToString(getOperator()) + " " + getRight()->toString();
     }
 
     std::string UniRelationalExpr::toString() const
     {
         std::string s = "";
-        if (op != RelationalOperator::No_Op)
+        if (getOperator() == RelationalOperator::Not)
         {
-            s += relOperatorToString(op) + " ";
+            s += relOperatorToString(getOperator()) + " ";
         }
-        s += left->toString();
+        s += getLeft()->toString();
         return s;
     }
 
     std::string NumberLiteral::toString() const
     {
-        return std::to_string(value);
+        return std::to_string(getValue());
     }
 
     std::string Identifier::toString() const
     {
-        return name;
+        return getName();
     }
 };
