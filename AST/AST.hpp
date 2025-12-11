@@ -110,6 +110,23 @@ namespace AST
         StatementPtr stmt;
     };
 
+    class ForStmt : public Statement
+    {
+    public:
+        ForStmt(VarDecl contVar, ExprPtr cond, Assignment incVar, StatementPtr stmt) : Statement(Kind::For), controlVar(std::move(contVar)), condition(std::move(cond)), incrementVar(std::move(incVar)), stmt(std::move(stmt)) {}
+        std::string toString() const override;
+        const VarDecl &getControlVar() const { return controlVar; }
+        const Expr *getCondition() const { return condition.get(); }
+        const Assignment &getIncrementVar() const { return incrementVar; }
+        const Statement *getStatement() const { return stmt.get(); }
+
+    private:
+        VarDecl controlVar;
+        ExprPtr condition;
+        Assignment incrementVar;
+        StatementPtr stmt;
+    };
+
     class PrintStmt : public Statement
     {
     public:
@@ -159,6 +176,22 @@ namespace AST
         std::string name;
     };
 
+    class RecursiveExpr : public Expr
+    {
+    public:
+        RecursiveExpr(ExprPtr l, AritmeticOperator op, ExprPtr r) : Expr(Kind::AritmeticExpr), op(op), left(std::move(l)), right(std::move(r)) {}
+
+        std::string toString() const override;
+        const Expr *getLeftExpr() const { return left.get(); }
+        const Expr *getRightExpr() const { return right.get(); }
+        AritmeticOperator getOperator() const { return op; }
+
+    private:
+        AritmeticOperator op;
+        ExprPtr left;
+        ExprPtr right;
+    };
+
     class BinRelationalExpr : public Expr
     {
     public:
@@ -194,7 +227,7 @@ namespace AST
         switch (t)
         {
         case DataType::Int:
-            return "Int";
+            return "int";
         default:
             return "UnknownType";
         }
@@ -220,6 +253,23 @@ namespace AST
             return "!";
         default:
             return "UnknownOp";
+        }
+    }
+
+    inline std::string aritOperatorToString(AritmeticOperator op)
+    {
+        switch (op)
+        {
+        case AritmeticOperator::Add:
+            return "+";
+        case AritmeticOperator::Subtract:
+            return "-";
+        case AritmeticOperator::Multiply:
+            return "*";
+        case AritmeticOperator::Divide:
+            return "/";
+        default:
+            return "UnknownAritOp";
         }
     }
 };

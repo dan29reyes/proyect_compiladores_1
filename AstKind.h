@@ -6,10 +6,12 @@ enum class Kind
     Assignment,
     If,
     While,
+    For,
     Block,
     Number,
     Identifier,
-    RelationalExpr
+    RelationalExpr,
+    AritmeticExpr
 };
 
 enum class RelationalOperator
@@ -21,6 +23,14 @@ enum class RelationalOperator
     Equal,
     NotEqual,
     Not
+};
+
+enum class AritmeticOperator
+{
+    Add,
+    Subtract,
+    Multiply,
+    Divide
 };
 
 enum class DataType

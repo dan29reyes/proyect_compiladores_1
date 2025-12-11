@@ -50,6 +50,37 @@ int main()
             std::move(whileCond),
             std::make_unique<AST::BlockStmt>(std::move(whileBlock))));
 
+    // Block statement del For
+    std::vector<AST::StatementPtr> forBlock;
+    forBlock.push_back(std::make_unique<AST::PrintStmt>(std::make_unique<AST::Identifier>("x")));
+    forBlock.push_back(std::make_unique<AST::Assignment>(
+        "x",
+        std::make_unique<AST::RecursiveExpr>(
+            std::make_unique<AST::Identifier>("x"),
+            AritmeticOperator::Add,
+            std::make_unique<AST::NumberLiteral>(1)))); // x = x + 1
+
+    AST::VarDecl controlVar(DataType::Int, "i", std::make_unique<AST::NumberLiteral>(0));
+    
+    AST::ExprPtr forCond = std::make_unique<AST::BinRelationalExpr>(
+        std::make_unique<AST::Identifier>("i"),
+        RelationalOperator::LessThan,
+        std::make_unique<AST::NumberLiteral>(5));
+
+    AST::Assignment incrementVar(
+        "i", 
+        std::make_unique<AST::RecursiveExpr>(
+            std::make_unique<AST::Identifier>("i"),
+            AritmeticOperator::Add,
+            std::make_unique<AST::NumberLiteral>(1))); // i = i + 1
+
+    statements.push_back(
+        std::make_unique<AST::ForStmt>(
+            std::move(controlVar),
+            std::move(forCond),
+            std::move(incrementVar),
+            std::make_unique<AST::BlockStmt>(std::move(forBlock))));
+
     AST::Program program(std::move(statements));
     std::string programStr = program.toString();
     std::cout << programStr << std::endl;

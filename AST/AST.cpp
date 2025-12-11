@@ -44,6 +44,11 @@ namespace AST
         return "while (" + getCondition()->toString() + ")" + getStatement()->toString();
     }
 
+    std::string ForStmt::toString() const
+    {
+        return "for (" + getControlVar().toString() + " " + getCondition()->toString() + "; " + getIncrementVar().toString() + ")" + getStatement()->toString();
+    }
+
     std::string PrintStmt::toString() const
     {
         return "print(" + getExpression()->toString() + ");";
@@ -75,6 +80,11 @@ namespace AST
         }
         s += getLeft()->toString();
         return s;
+    }
+
+    std::string RecursiveExpr::toString() const
+    {
+        return getLeftExpr()->toString() + " " + aritOperatorToString(getOperator()) + " " + getRightExpr()->toString();
     }
 
     std::string NumberLiteral::toString() const
