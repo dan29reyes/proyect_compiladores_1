@@ -205,7 +205,7 @@ namespace AST
         switch (op)
         {
         case RelationalOperator::Equal:
-            return "=";
+            return "==";
         case RelationalOperator::GreaterThan:
             return ">";
         case RelationalOperator::GreaterThanOrEqual:

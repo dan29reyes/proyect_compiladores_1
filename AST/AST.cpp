@@ -21,12 +21,12 @@ namespace AST
         {
             s += " = " + getInitializer()->toString();
         }
-        return s;
+        return s + ";";
     }
 
     std::string Assignment::toString() const
     {
-        return getName() + " = " + getValue()->toString();
+        return getName() + " = " + getValue()->toString() + ";";
     }
 
     std::string IfStmt::toString() const
@@ -46,7 +46,18 @@ namespace AST
 
     std::string PrintStmt::toString() const
     {
-        return "print(" + getExpression()->toString() + ")";
+        return "print(" + getExpression()->toString() + ");";
+    }
+
+    std::string BlockStmt::toString() const
+    {
+        std::string s = "{\n";
+        for (const auto &stmt : getStatements())
+        {
+            s += "  " + stmt->toString() + "\n";
+        }
+        s += "}";
+        return s;
     }
 
     // Expr
