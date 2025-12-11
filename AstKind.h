@@ -1,5 +1,6 @@
 enum class Kind
 {
+    Program,
     Print,
     VarDecl,
     Assignment,

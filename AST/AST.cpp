@@ -2,6 +2,17 @@
 
 namespace AST
 {
+    // Program
+    std::string Program::toString() const
+    {
+        std::string s;
+        for (const auto &stmt : statements)
+        {
+            s += stmt->toString() + "\n";
+        }
+        return s;
+    }
+
     // Statement
     std::string VarDecl::toString() const
     {

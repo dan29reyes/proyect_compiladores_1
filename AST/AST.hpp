@@ -1,6 +1,7 @@
 #include <memory>
 #include "../AstKind.h"
 #include <string>
+#include <vector>
 
 namespace AST
 {
@@ -25,6 +26,17 @@ namespace AST
     using StatementPtr = std::unique_ptr<Statement>;
 
     // Nodes
+    class Program : public Node
+    {
+    private:
+        std::vector<StatementPtr> statements;
+
+    public:
+        Program(std::vector<StatementPtr> stmts) : Node(Kind::Program), statements(std::move(stmts)) {}
+        const std::vector<StatementPtr> &getStatements() const { return statements; }
+        std::string toString() const override;
+    };
+
     class Expr : public Node
     {
     public:
@@ -108,6 +120,18 @@ namespace AST
 
     private:
         ExprPtr expr;
+    };
+
+    class BlockStmt : public Statement
+    {
+    public:
+        BlockStmt(std::vector<StatementPtr> stmts) : Statement(Kind::Block), stmts(std::move(stmts)) {}
+
+        std::string toString() const override;
+        const std::vector<StatementPtr> &getStatements() const { return stmts; }
+
+    private:
+        std::vector<StatementPtr> stmts;
     };
 
     // Expression Nodes
